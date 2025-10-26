@@ -9,7 +9,7 @@ class LLMConfiguration:
         pass
 
     # Define filename to download models from Hugging Face model hub.
-    def prepareLlmInstanceAndGetInstance():
+    def prepareLlmInstanceAndGetInstance(self):
         model_name_or_path = "TheBloke/Mistral-7B-Instruct-v0.2-GGUF"
         model_basename = "mistral-7b-instruct-v0.2.Q6_K.gguf"
 
