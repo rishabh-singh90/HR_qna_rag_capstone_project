@@ -16,6 +16,7 @@ import tiktoken
 # Embedding model and Pdfreader libs
 import langchain_community
 from langchain_community.document_loaders import PyMuPDFLoader
+from langchain.schema import Document
 from langchain_community.embeddings.sentence_transformer import SentenceTransformerEmbeddings
 
 #Chroma DB import
