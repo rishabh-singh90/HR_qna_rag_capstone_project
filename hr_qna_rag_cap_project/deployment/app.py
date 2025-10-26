@@ -10,9 +10,10 @@ import data_preparation
 llm_configuration = llm_configuration.LLMConfiguration()
 lcpp_llm = llm_configuration.prepareLlmInstanceAndGetInstance()
 
-retriever_vectorDB = data_preparation.getVectorDBRetriever()
+retriever_vectorDB = data_preparation.RAGDataPreparation()
+retriever = retriever_vectorDB.getVectorDBRetriever()
 
-rag_response_generator = qna_hr_rag.RAGResponseGenerator(retriever_vectorDB, lcpp_llm)
+rag_response_generator = qna_hr_rag.RAGResponseGenerator(retriever, lcpp_llm)
 
 # Initialize chat history
 if "messages" not in st.session_state:
