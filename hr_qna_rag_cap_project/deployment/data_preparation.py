@@ -7,6 +7,7 @@ import os
 # for data preprocessing and pipeline creation
 # for hugging face space authentication to upload files
 from huggingface_hub import login, HfApi
+from datasets import load_dataset
 
 #Libraries for processing dataframes,text
 import json
@@ -23,14 +24,28 @@ from langchain_community.vectorstores import Chroma
 class RAGDataPreparation:
 
     DATASET_PATH = "hf://datasets/rishabhsinghjk/HR-QnA-rag-dataspace/Flykite_Airlines_HRP.pdf"
+    dataset_space = "rishabhsinghjk/HR-QnA-rag-dataspace"
 
     def __init__(self):
         pass
 
+    def getPDFFileLoader(self):
+        dataset = load_dataset(RAGDataPreparation.dataset_space)
+        pdf_data = dataset["train"][0]["pdf"]
+        # Create a temporary file path
+        temp_pdf_path = "Flykite_Airlines_HRP.pdf"
+
+        # If pdf_data is binary content
+        with open(temp_pdf_path, "wb") as f:
+            f.write(pdf_data)
+        
+        pdf_loader = PyMuPDFLoader(temp_pdf_path)
+        return pdf_loader
+
     def gethrPdfDocLoader(self):        
         # Define constants for the dataset and output paths
         api = HfApi(token=os.getenv("HF_TOKEN"))
-        pdf_loader = PyMuPDFLoader(RAGDataPreparation.DATASET_PATH)
+        pdf_loader = self.getPDFFileLoader()
         hr_doc = pdf_loader.load()
         print("Dataset loaded successfully.")
         return pdf_loader
