@@ -21,6 +21,10 @@ from langchain_community.embeddings.sentence_transformer import SentenceTransfor
 #Chroma DB import
 from langchain_community.vectorstores import Chroma
 
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+import requests
+import pdfplumber
+
 class RAGDataPreparation:
 
     DATASET_PATH = "hf://datasets/rishabhsinghjk/HR-QnA-rag-dataspace/Flykite_Airlines_HRP.pdf"
@@ -42,6 +46,20 @@ class RAGDataPreparation:
         pdf_loader = PyMuPDFLoader(temp_pdf_path)
         return pdf_loader
 
+    def getPDFFileContent(self):
+        dataset = load_dataset(RAGDataPreparation.dataset_space)
+        pdf_data = dataset["train"][0]["pdf"]
+        # Create a temporary file path
+        full_content = []
+        for page_num, page in enumerate(pdf_data.pages):
+            # Extract text
+            text = page.extract_text()
+            if text:
+                full_content.append(text)
+
+            content = "\n\n".join(full_content)
+        return content
+
     def gethrPdfDocLoader(self):        
         # Define constants for the dataset and output paths
         api = HfApi(token=os.getenv("HF_TOKEN"))
@@ -50,7 +68,7 @@ class RAGDataPreparation:
         print("Dataset loaded successfully.")
         return pdf_loader
 
-    def docChunks(self,pdf_loader):
+    def docChunks(self,pdf_content):
         #Defining the chunk size for creation of embedings.
         chunk_size=256
 
@@ -65,7 +83,7 @@ class RAGDataPreparation:
         )
 
         #Spliting and creating chunks list
-        document_chunks = pdf_loader.load_and_split(text_splitter)
+        document_chunks = text_splitter.split_text(pdf_content)
         return document_chunks
 
     def createVectorDB(self,document_chunks):
@@ -74,7 +92,7 @@ class RAGDataPreparation:
 
         #Creating Embeding model for initiliazing vector DB
         embedding_model = SentenceTransformerEmbeddings(model_name='thenlper/gte-large')
-        embedding_1 = embedding_model.embed_query(document_chunks[0].page_content)
+        embedding_1 = embedding_model.embed_query(document_chunks[0])
         print("Dimension of the embedding vector ",len(embedding_1))
 
         # Create Persistent Data directory
@@ -102,7 +120,7 @@ class RAGDataPreparation:
         return retriever_cromadb    
 
     def getVectorDBRetriever(self):
-        pdf_loader = self.gethrPdfDocLoader()
-        document_chunks = self.docChunks(pdf_loader)
+        pdf_content = self.getPDFFileContent()
+        document_chunks = self.docChunks(pdf_content)
         vectorstore_croma = self.createVectorDB(document_chunks)
         return self.createVectorDBRetriever(vectorstore_croma)
