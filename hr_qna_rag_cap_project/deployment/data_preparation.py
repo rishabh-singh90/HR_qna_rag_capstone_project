@@ -12,6 +12,9 @@ class RAGDataPreparation:
 
     DATASET_PATH = "hf://datasets/rishabhsinghjk/HR-QnA-rag-dataspace/Flykite_Airlines_HRP.pdf"
 
+    def __init__(self):
+        pass
+
     def gethrPdfDocLoader(self,dataset_path):
         global DATASET_PATH
         # Define constants for the dataset and output paths
