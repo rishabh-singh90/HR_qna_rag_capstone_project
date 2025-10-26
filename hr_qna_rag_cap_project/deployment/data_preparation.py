@@ -15,7 +15,7 @@ class RAGDataPreparation:
     def __init__(self):
         pass
 
-    def gethrPdfDocLoader(self,dataset_path):
+    def gethrPdfDocLoader(self):
         global DATASET_PATH
         # Define constants for the dataset and output paths
         api = HfApi(token=os.getenv("HF_TOKEN"))
@@ -76,7 +76,7 @@ class RAGDataPreparation:
         return retriever_cromadb    
 
     def getVectorDBRetriever(self):
-        pdf_loader = self.gethrPdfDocLoader(DATASET_PATH)
+        pdf_loader = self.gethrPdfDocLoader()
         document_chunks = self.docChunks(pdf_loader)
         vectorstore_croma = self.createVectorDB(document_chunks)
         return self.createVectorDBRetriever(vectorstore_croma)
