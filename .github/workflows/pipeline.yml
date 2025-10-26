@@ -1,1 +1,31 @@
+name: HR Q&A AI Chatbot pipeline
 
+on:
+  push:
+    branches:
+      - main  # Automatically triggers on push to the main branch
+
+jobs:
+
+  register-dataset:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: pip install --ignore-installed -r hr_qna_rag_cap_project/deployment/requirements.txt
+      - name: Upload Dataset to Hugging Face Hub
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: python hr_qna_rag_cap_project/rag_data_building/data_registration.py
+
+  deploy-hosting:
+    runs-on: ubuntu-latest
+    needs: [register-dataset]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: pip install --ignore-installed -r hr_qna_rag_cap_project/deployment/requirements.txt
+      - name: Push files to Frontend Hugging Face Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: python hr_qna_rag_cap_project/hosting/hosting.py
