@@ -8,6 +8,18 @@ import os
 # for hugging face space authentication to upload files
 from huggingface_hub import login, HfApi
 
+#Libraries for processing dataframes,text
+import json
+import tiktoken
+
+# Embedding model and Pdfreader libs
+import langchain_community
+from langchain_community.document_loaders import PyMuPDFLoader
+from langchain_community.embeddings.sentence_transformer import SentenceTransformerEmbeddings
+
+#Chroma DB import
+from langchain_community.vectorstores import Chroma
+
 class RAGDataPreparation:
 
     DATASET_PATH = "hf://datasets/rishabhsinghjk/HR-QnA-rag-dataspace/Flykite_Airlines_HRP.pdf"
