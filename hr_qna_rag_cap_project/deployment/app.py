@@ -1,7 +1,4 @@
 
-# Installation for GPU llama-cpp-python
-!CMAKE_ARGS="-DLLAMA_CUBLAS=on" FORCE_CMAKE=1 pip install llama-cpp-python==0.1.85 --force-reinstall --no-cache-dir -q
-
 import streamlit as st
 import pandas as pd
 from huggingface_hub import hf_hub_download
