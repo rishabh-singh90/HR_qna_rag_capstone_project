@@ -27,11 +27,10 @@ class RAGDataPreparation:
     def __init__(self):
         pass
 
-    def gethrPdfDocLoader(self):
-        global DATASET_PATH
+    def gethrPdfDocLoader(self):        
         # Define constants for the dataset and output paths
         api = HfApi(token=os.getenv("HF_TOKEN"))
-        pdf_loader = PyMuPDFLoader(DATASET_PATH)
+        pdf_loader = PyMuPDFLoader(RAGDataPreparation.DATASET_PATH)
         hr_doc = pdf_loader.load()
         print("Dataset loaded successfully.")
         return pdf_loader
