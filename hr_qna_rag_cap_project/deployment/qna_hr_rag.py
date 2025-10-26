@@ -30,7 +30,7 @@ class RAGResponseGenerator:
         self.lcpp_llm = lcpp_llm  # Instance attribute lcpp_llm
 
     def generate_rag_response(self,user_input,k=2,max_tokens=512,temperature=0,top_p=0.95,top_k=2):
-        global qna_system_message,qna_user_message_template
+        
         # Retrieve relevant document chunks
         relevant_document_chunks = self.retriever.get_relevant_documents(query=user_input,k=k)
         context_list = [d.page_content for d in relevant_document_chunks]
@@ -38,11 +38,11 @@ class RAGResponseGenerator:
         # Combine document chunks into a single context for query
         context_for_query = ". ".join(context_list)
 
-        user_message = qna_user_message_template.replace('{context}', context_for_query)
+        user_message = RAGResponseGenerator.qna_user_message_template.replace('{context}', context_for_query)
         user_message = user_message.replace('{question}', user_input)
 
         # Combine user_prompt and system_message to create the prompt
-        prompt = f"""[INST]{qna_system_message}\n
+        prompt = f"""[INST]{RAGResponseGenerator.qna_system_message}\n
                     {'user'}: {user_message} \n
                     [/INST]"""
 
