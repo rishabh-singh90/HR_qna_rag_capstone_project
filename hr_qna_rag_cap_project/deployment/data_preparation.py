@@ -83,7 +83,16 @@ class RAGDataPreparation:
         )
 
         #Spliting and creating chunks list
-        document_chunks = text_splitter.split_text(pdf_content)
+        chunks = text_splitter.split_text(pdf_content)
+        
+        document_chunks = [
+            Document(
+                page_content=chunk,
+                metadata={"page_number": ("page"+ str(i+1)), "source": "Flykite_Airlines_HRP.pdf"}
+            )
+            for i, chunk in enumerate(chunks)
+        ]
+
         return document_chunks
 
     def createVectorDB(self,document_chunks):
@@ -92,7 +101,7 @@ class RAGDataPreparation:
 
         #Creating Embeding model for initiliazing vector DB
         embedding_model = SentenceTransformerEmbeddings(model_name='thenlper/gte-large')
-        embedding_1 = embedding_model.embed_query(document_chunks[0])
+        embedding_1 = embedding_model.embed_query(document_chunks[0].page_content)
         print("Dimension of the embedding vector ",len(embedding_1))
 
         # Create Persistent Data directory
