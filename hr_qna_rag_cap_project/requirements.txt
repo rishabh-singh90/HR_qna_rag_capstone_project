@@ -11,3 +11,4 @@ sentence-transformers==2.3.1
 numpy==1.26.4
 chromadb==0.4.22
 requests~=2.32.5
+datasets==4.0.0
