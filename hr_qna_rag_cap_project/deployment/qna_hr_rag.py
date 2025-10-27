@@ -30,11 +30,14 @@ class RAGResponseGenerator:
         self.lcpp_llm = lcpp_llm  # Instance attribute lcpp_llm
 
     def generate_rag_response(self,user_input,k=2,max_tokens=512,temperature=0,top_p=0.95,top_k=2):
+
+        print("user question:", user_input)
         
         # Retrieve relevant document chunks
         relevant_document_chunks = self.retriever.get_relevant_documents(query=user_input,k=k)
         context_list = [d.page_content for d in relevant_document_chunks]
 
+        print("Context length: ",len(context_list))
         # Combine document chunks into a single context for query
         context_for_query = ". ".join(context_list)
 
