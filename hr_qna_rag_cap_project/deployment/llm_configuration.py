@@ -24,8 +24,8 @@ class LLMConfiguration:
         #Initializing LLM model basic configurations
         lcpp_llm = Llama(
             model_path=model_path,
-            n_threads=2,      # CPU cores
-            n_batch=512,      # Should be between 1 and n_ctx, consider the amount of VRAM in your GPU.
+            n_threads=4,      # CPU cores
+            n_batch=256,      # Should be between 1 and n_ctx, consider the amount of VRAM in your GPU.
             n_gpu_layers=43,  # Change this value based on your model and your GPU VRAM pool.
             n_ctx=4096,       # Context window
         )
