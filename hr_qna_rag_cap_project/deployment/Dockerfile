@@ -7,7 +7,7 @@ WORKDIR /app
 # Copy all files from the current directory on the host to the container's /app directory
 COPY . .
 
-RUN !CMAKE_ARGS="-DLLAMA_CUBLAS=on" FORCE_CMAKE=1 pip3 install llama-cpp-python==0.1.85 --force-reinstall --no-cache-dir -q
+RUN CMAKE_ARGS="-DLLAMA_CUBLAS=on" FORCE_CMAKE=1 pip3 install llama-cpp-python==0.1.85 --force-reinstall --no-cache-dir -q
 # Install Python dependencies listed in requirements.txt
 RUN pip3 install -r requirements.txt
 
