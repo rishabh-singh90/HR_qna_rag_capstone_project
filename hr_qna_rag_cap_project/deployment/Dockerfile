@@ -1,6 +1,7 @@
-# Use a minimal base image with Python 3.12 installed
+# Use a nvidia cuda supported ubuntu base image
 FROM nvidia/cuda:12.9.0-runtime-ubuntu22.04
 
+# install python ninja git and nvidia toolkit
 RUN apt-get update && apt-get install -y python3 python3-pip ninja-build git nvidia-container-toolkit
 
 # Set the working directory inside the container to /app
@@ -9,6 +10,7 @@ WORKDIR /app
 # Copy all files from the current directory on the host to the container's /app directory
 COPY . .
 
+# Adding the cuda and cmake flags to rebuld llama cpp with cublas on
 ENV CMAKE_ARGS="-DLLAMA_CUBLAS=on"
 ENV FORCE_CMAKE=1
 
